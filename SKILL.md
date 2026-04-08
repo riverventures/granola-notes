@@ -66,10 +66,10 @@ For most requests:
 4. cite the meeting name or date when useful
 
 ### Good queries
-- what did Maya say about Zand
-- what were the action items from the Axiym call
-- did Nick agree to the 5bps incentive
-- summarize the last meeting with R3
+- what did the client say about the rollout
+- what were the action items from the investor call
+- did the partner agree to the commercial terms
+- summarize the last meeting with the prospect
 
 ## Archive script
 
@@ -132,11 +132,11 @@ Default output:
 ```text
 $MEETING_ARCHIVE/
 ├── 2026-03-31_Weekly-Pipeline-Review_abc123.md
-├── 2026-03-30_Farhad-Axiym-Call_def456.md
-├── 2026-03-28_Maya-Alex-Sync_ghi789.md
+├── 2026-03-30_Investor-Call_def456.md
+├── 2026-03-28_Leadership-Sync_ghi789.md
 ├── debriefs/
 │   ├── 2026-03-31-Weekly-Pipeline-Review.md
-│   └── 2026-03-30-Farhad-Axiym-Call.md
+│   └── 2026-03-30-Investor-Call.md
 └── prep/
-    └── 2026-04-01-KAST-Lunch-Prep.md
+    └── 2026-04-01-Partner-Meeting-Prep.md
 ```

@@ -16,10 +16,10 @@ Instead of re-querying Granola for every meeting question, the skill exports not
 
 ## Best use cases
 
-- “What did we decide on the R3 call?”
-- “Pull action items from the Axiym meeting.”
-- “Summarize the last sync with Maya.”
-- “Search all meetings for AE Coin.”
+- “What did we decide on the partner call?”
+- “Pull action items from the investor meeting.”
+- “Summarize the last leadership sync.”
+- “Search all meetings for the new product line.”
 - “Archive today’s Granola notes to disk.”
 
 ## Compatibility
@@ -100,7 +100,7 @@ No transcript spam.
 
 - founders
 - chiefs of staff
-- investor/BD workflows
+- business development teams
 - operators who live inside meeting-heavy pipelines
 - teams running multiple local AI agents with shared memory
 
