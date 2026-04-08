@@ -1,100 +1,108 @@
-# 📝 granola-notes
+# granola-notes
 
-Meeting memory for AI agents. An [OpenClaw](https://github.com/openclaw/openclaw) skill.
+Meeting memory for AI agents.
 
-## What it does
+`granola-notes` is a local-first skill for turning Granola meeting notes into a searchable archive that works across both **OpenClaw** and **Hermes**.
 
-Connects your [Granola](https://granola.so) meeting notes to your AI agent. Auto-archives to local disk, syncs across multiple agents via Syncthing, posts summaries to Telegram or Discord, and lets you search past meetings in natural language.
+Instead of re-querying Granola for every meeting question, the skill exports notes to markdown, stores them locally, and lets your agent search the archive fast.
 
-```
-"What did Farhad say about the Korean bank consortium?"
-```
+## Why use it
 
-→ Searches 700+ archived meeting notes, finds the relevant calls, pulls the exact quotes.
+- one archive, multiple agents
+- works with OpenClaw and Hermes
+- faster than repeated live Granola reads
+- more reliable when Granola auth flakes out
+- clean setup for post-meeting debriefs, prep notes, and action-item lookup
 
-## Install
+## Best use cases
 
-```bash
-openclaw skill add riverventures/granola-notes
-```
+- “What did we decide on the R3 call?”
+- “Pull action items from the Axiym meeting.”
+- “Summarize the last sync with Maya.”
+- “Search all meetings for AE Coin.”
+- “Archive today’s Granola notes to disk.”
 
-## Features
+## Compatibility
 
-| Feature | What it does |
-|---|---|
-| **Auto-archive** | Exports Granola meetings as markdown files to local disk daily |
-| **Multi-agent sync** | Syncthing distributes the archive to all your AI agents (laptop, VPS, Pi) |
-| **Summary delivery** | Posts meeting summaries + action items to Telegram or Discord after each call |
-| **Natural language search** | Ask about any past meeting — who said what, action items, decisions made |
+### OpenClaw
+Use it as a normal OpenClaw skill.
+OpenClaw can search the archive, quote meetings, and optionally send short summaries through Telegram, Discord, or another channel.
 
-## How it works
+### Hermes
+Use the same archive path and let Hermes read the markdown directly.
+Hermes does not need Granola live on every query if the archive is synced and current.
 
-```
-Granola App → Archive Script → Local Disk → Syncthing → All Your Agents
-                                    ↓
-                          Telegram / Discord (summaries)
-```
+## Core model
 
-1. **Granola** records your meetings with AI-enhanced notes
-2. **Archive script** exports new meetings daily as markdown files
-3. **Syncthing** syncs the archive to every connected device
-4. **Your agent** searches the local archive to answer questions about past meetings
-5. **Summaries** get posted to your preferred channel after each meeting
+Archive once. Query forever.
 
-## Why local-first?
+The Granola CLI is for collecting notes.
+The local markdown archive is for daily agent use.
 
-- **Fast.** Grep is instant. No API calls, no rate limits.
-- **Private.** Meeting transcripts never leave your devices.
-- **Resilient.** Works offline. No dependency on Granola's servers for past meetings.
-- **Shareable.** Syncthing lets multiple AI agents access the same meeting history without giving each one API credentials.
+## Files
 
-## Requirements
+- `SKILL.md` — main runtime instructions
+- `scripts/archive-granola.sh` — export notes from Granola into the archive
 
-- [Granola](https://granola.so) app installed and authenticated
-- `granola` CLI
-- Optional: [Syncthing](https://syncthing.net/) for multi-device sync
-- Optional: OpenClaw with Telegram/Discord configured
+## Setup
 
-## Quick Start
+1. Install and authenticate Granola on the primary machine.
+2. Choose an archive directory.
+3. Run the archive script.
+4. Sync the archive to any other machine that needs meeting access.
+5. Point OpenClaw or Hermes at the same markdown archive.
+
+## Example archive path
 
 ```bash
-# 1. Set your archive path
-export MEETING_ARCHIVE="$HOME/MeetingMemoryShared/SyncedMeetingNotes"
-mkdir -p "$MEETING_ARCHIVE/debriefs" "$MEETING_ARCHIVE/prep"
+export MEETING_ARCHIVE="$HOME/meetings/granola"
+mkdir -p "$MEETING_ARCHIVE"
+```
 
-# 2. Run the archive script (or set up a daily cron)
+## Archive meetings
+
+```bash
 bash scripts/archive-granola.sh
-
-# 3. Start asking questions
-# "What action items came out of yesterday's call?"
-# "Find all meetings about stablecoins this month"
 ```
 
-## Example Queries
+## Recommended pattern
 
-- "What did we discuss with Zand last month?"
-- "Who was in the call on March 16?"
-- "What action items came out of the Maya meeting?"
-- "Find all meetings about stablecoins"
-- "Summarize the last 3 meetings with Farhad"
+- primary machine: Granola app + CLI + archive script
+- secondary machines or agents: read-only synced archive
+- queries: archive first, live CLI second
 
-## Archive Format
+## Search behavior
 
-```
-$MEETING_ARCHIVE/
-├── 2026-03-31_Weekly-Pipeline-Review_abc123.md
-├── 2026-03-30_Farhad-Axiym-Call_def456.md
-├── debriefs/
-│   └── 2026-03-31-Weekly-Pipeline-Review.md
-└── prep/
-    └── 2026-04-01-Client-Lunch-Prep.md
-```
+The agent should:
+1. search the archive
+2. open the best matching note
+3. extract decisions, quotes, and next steps
+4. only fall back to live Granola if the archive is stale or missing
 
-Each file contains: title, date, attendees, AI-enhanced summary, and full timestamped transcript.
+## Security
 
-## Multi-Agent Setup
+Meeting notes are sensitive.
+Treat the archive as private workspace data.
+Do not dump raw transcripts into public channels.
+Do not expose runtime secrets, device IDs, tokens, or account details.
 
-Run Granola on your primary machine (laptop). Set it as **Send Only** in Syncthing. Set all agent devices (VPS, Pi, other machines) as **Receive Only**. Agents read from their local copy — fast, no API credentials needed, no risk of corruption.
+## Good output style
+
+For most meeting questions, return:
+- the answer
+- the meeting/date reference
+- next actions or blockers if relevant
+
+If posting a summary externally, keep it tight.
+No transcript spam.
+
+## Who this is for
+
+- founders
+- chiefs of staff
+- investor/BD workflows
+- operators who live inside meeting-heavy pipelines
+- teams running multiple local AI agents with shared memory
 
 ## License
 
